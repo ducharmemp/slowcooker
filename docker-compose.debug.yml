@@ -1,0 +1,11 @@
+version: '2.1'
+
+services:
+  slowcooker:
+    image: slowcooker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    command: python -m gunicorn myapp.wsgi:application -w 2 -b :3000 --reload
