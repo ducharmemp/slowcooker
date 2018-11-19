@@ -10,9 +10,10 @@ reload = True
 REACT_PROCESS = None
 
 
-def on_starting(server):
-    global REACT_PROCESS
-    REACT_PROCESS = subprocess.Popen(['npm', 'run', 'start', '--prefix', './source/public/'])
+# def on_starting(server):
+#     global REACT_PROCESS
+#     os.chdir('static')
+#     REACT_PROCESS = subprocess.Popen(['npm', 'run', 'start'])
 
-def on_exit(server):
-    REACT_PROCESS.terminate()
+# def on_exit(server):
+#     REACT_PROCESS.terminate()

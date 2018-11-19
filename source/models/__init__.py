@@ -4,9 +4,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
+from source.config import CONFIG
+
 Base = declarative_base()
 
-ENGINE = create_engine("sqlite://", pool_pre_ping=True)
+ENGINE = create_engine('{dialect}+{driver}://{username}:{password}@{host}:{port}/{database}'.format(**CONFIG['database']['uri']), **CONFIG['database']['config'])
 _session_cls = sessionmaker(bind=ENGINE)
 
 

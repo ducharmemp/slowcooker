@@ -3,3 +3,5 @@ flask
 toolz
 marshmallow
 gunicorn
+psycopg2
+pytoml

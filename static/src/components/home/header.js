@@ -6,20 +6,29 @@ import {
   Header,
   Icon,
 } from 'semantic-ui-react'
+import styled from 'styled-components'
+
+const CompanyTitle = styled(Header)`
+    &&& {
+        font-weight: normal;
+        margin-bottom: 0;
+        margin-top: 3em;
+    }
+`;
 
 
 const HomepageHeading = ({ mobile }) => (
     <Container text>
-      <Header
+      <CompanyTitle
         as='h1'
         content='Imagine-a-Company'
         inverted
-        style={{
-          fontSize: mobile ? '2em' : '4em',
-          fontWeight: 'normal',
-          marginBottom: 0,
-          marginTop: mobile ? '1.5em' : '3em',
-        }}
+        // style={{
+        //   fontSize: mobile ? '2em' : '4em',
+        //   fontWeight: 'normal',
+        //   marginBottom: 0,
+        //   marginTop: mobile ? '1.5em' : '3em',
+        // }}
       />
       <Header
         as='h2'
