@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.orm import relationship
 
-from . import Base
+from . import Base, Recipe
+
 
 class User(Base):
     __tablename__ = "users"

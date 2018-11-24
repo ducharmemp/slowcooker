@@ -46,9 +46,9 @@ const HomepageHeading = ({ mobile }) => (
       </Button>
     </Container>
   )
-  
+
   HomepageHeading.propTypes = {
     mobile: PropTypes.bool,
   }
-  
+
   export default HomepageHeading;
