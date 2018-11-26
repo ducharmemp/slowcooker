@@ -6,7 +6,8 @@ pythonpath = os.path.abspath("./")
 
 from source.models import init_database
 
-workers = multiprocessing.cpu_count() * 2 + 1
+# workers = multiprocessing.cpu_count() * 2 + 1
+workers = 1
 reload = True
 
 REACT_PROCESS = None

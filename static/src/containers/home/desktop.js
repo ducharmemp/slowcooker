@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Container,
@@ -7,20 +9,40 @@ import {
   Responsive,
   Segment,
   Visibility,
-} from 'semantic-ui-react'
+} from 'semantic-ui-react';
+import { isEmpty } from 'lodash';
 
 import { HomepageHeading } from '../../components/home';
 
 class DesktopContainer extends Component {
     state = {}
-  
+
     hideFixedMenu = () => this.setState({ fixed: false })
     showFixedMenu = () => this.setState({ fixed: true })
-  
+
+    renderAuthentication(fixed, authenticationFunc) {
+        return (<Menu.Item position='right'>
+            <Link to='/login'>
+          <Button as='a' inverted={!fixed} onClick={authenticationFunc}>
+              Log in
+          </Button>
+          </Link>
+          <Link to='/login'>
+          <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
+              Sign Up
+          </Button>
+          </Link>
+        </Menu.Item>);
+    }
+
     render() {
-      const { children } = this.props
-      const { fixed } = this.state
-  
+      const {
+          children,
+          authenticateUser,
+          user
+        } = this.props;
+      const { fixed } = this.state;
+
       return (
         <Responsive minWidth={Responsive.onlyTablet.minWidth}>
           <Visibility
@@ -48,28 +70,33 @@ class DesktopContainer extends Component {
                   <Menu.Item as='a'>Work</Menu.Item>
                   <Menu.Item as='a'>Company</Menu.Item>
                   <Menu.Item as='a'>Careers</Menu.Item>
-                  <Menu.Item position='right'>
-                    <Button as='a' inverted={!fixed}>
-                      Log in
-                    </Button>
-                    <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-                      Sign Up
-                    </Button>
-                  </Menu.Item>
+                  { isEmpty(user) && this.renderAuthentication(fixed, authenticateUser) }
                 </Container>
               </Menu>
               <HomepageHeading />
             </Segment>
           </Visibility>
-  
+
           {children}
         </Responsive>
       )
     }
   }
-  
-  DesktopContainer.propTypes = {
-    children: PropTypes.node,
+
+  function mapStateToProps(state, ownProps) {
+      return {};
   }
 
-  export default DesktopContainer;
+  function mapDispatchToProps(dispatch) {
+}
+
+DesktopContainer.defaultProps = {
+    user: {}
+}
+
+DesktopContainer.propTypes = {
+    children: PropTypes.node,
+    user: PropTypes.object
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DesktopContainer);

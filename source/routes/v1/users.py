@@ -1,18 +1,16 @@
 from flask import jsonify
-from flask.views import MethodView
-from marshmallow import Schema, fields
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, lazyload
+from sqlalchemy.orm.exc import NoResultFound
 
 from source.models import connection
-from source.models.users import User
+from source.models import User, Recipe
+from source.utils.session_view import SessionView
+from source.utils.marshalling import CustomSchema, marshall_with
 
-class UserSchema(Schema):
-    id = fields.Integer()
-    name = fields.String()
-    recipes = fields.Url(relative=True, many=True)
+from .schemas import UserSchema, UserRecipeSchema
 
 
-class UserResource(MethodView):
+class UserResource(SessionView):
     __route_name__ = 'users'
 
     routes = [
@@ -20,18 +18,40 @@ class UserResource(MethodView):
         '/users/<int:id>'
     ]
 
-    def get(_, _id=None):
-        with connection() as session:  # type: Session
-            users = session.query(User)
-            if _id is not None:
-                users = users.filter(User.id==_id).one()
-            else:
-                users = users.all()
-            return jsonify(users)
+    @marshall_with(UserSchema)
+    def get(_, session, id=None):
+        users = session.query(User)
+        if id is not None:
+            users = users.filter(User.id == id).one()
+        else:
+            users = users.all()
+        return users
 
-    def post(_):
-        with connection() as session:  # type Session
-            user = User()
-            session.add(User)
-            session.commit()
-            return user.id
+    @marshall_with(UserSchema, allow_none=True)
+    def post(_, session, data=None, **kwargs):
+        session.add(data)
+        session.commit()
+        return data
+
+
+class UserRecipeResource(SessionView):
+    __route_name__ = 'users_recipes'
+
+    routes = [
+        '/users/<int:id>/recipes',
+        '/users/<int:id>/recipes/<int:recipe_id>'
+    ]
+
+    @marshall_with(UserRecipeSchema)
+    def get(_, session, id, recipe_id=None):
+        res = session.query(User).filter(User.id == id).one().recipes
+        if recipe_id is not None:
+            res = [recipe for recipe in res if recipe.id == recipe_id][0]
+        return res
+
+    @marshall_with(UserRecipeSchema, allow_none=True)
+    def post(_, session, id=None, data=None, **kwargs):
+        data.creator_id = id
+        session.add(data)
+        session.commit()
+        return data

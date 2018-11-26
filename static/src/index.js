@@ -9,6 +9,7 @@ import './styles/fonts.css';
 import {
     HomepageLayout,
     RecipeLayout,
+    LoginLayout,
     NotFoundLayout
  } from './containers';
 import configureStore from './store/createStore';
@@ -20,6 +21,7 @@ ReactDOM.render((
             <Switch>
                 <Route exact path='/' component={HomepageLayout} />
                 <Route exact path='/recipe' component={RecipeLayout} />
+                <Route exact path='/login' component={LoginLayout} />
                 <Route path='*' component={NotFoundLayout} />
             </Switch>
         </Router>

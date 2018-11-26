@@ -8,9 +8,8 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    name = Column(Text)
+    name = Column(Text, nullable=False)
     # This should be salt and peppered
-    password = Column(Text)
+    password = Column(Text, nullable=False)
 
     recipes = relationship(Recipe)
-

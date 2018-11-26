@@ -1,23 +1,11 @@
-from marshmallow import Schema, fields
 from sqlalchemy.orm import Session
 from flask import request, jsonify
 
-from source.models import Recipe
+from source.models import Recipe, RecipeStep
 from source.utils.session_view import SessionView
 from source.utils.marshalling import marshall_with
 
-
-# class RecipeStepSchema(Schema):
-#     id = fields.Integer()
-#     number = fields.Integer()
-#     description = fields.String()
-#     comment = fields.String()
-
-
-class RecipeSchema(Schema):
-    id = fields.Integer()
-    name = fields.String()
-    # steps = fields.Nested(RecipeStepSchema, many=True)
+from .schemas import RecipeSchema
 
 
 class RecipeResource(SessionView):
@@ -28,29 +16,26 @@ class RecipeResource(SessionView):
         '/recipes/<int:id>'
     ]
 
-    # @marshall_with(RecipeResource)
+    @marshall_with(RecipeSchema)
     def get(_, session, id=None):
         res = session.query(Recipe)
         if id is not None:
-            return jsonify(res.filter(Recipe.id == id).first())
+            return res.filter(Recipe.id == id).first()
         else:
-            return jsonify(res.all())
+            return res.all()
 
-    # @marshall_with(RecipeResource)
-    def post(_, session: Session, id=None):
-        recipe = Recipe()
-        session.add(recipe)
+    @marshall_with(RecipeSchema)
+    def post(_, session: Session, id=None, data=None):
+        session.add(data)
         session.commit()
-        return recipe.id
+        return data.id
 
-    # @marshall_with(RecipeResource)
-    def put(_, session, id=None):
-        recipe = session.query(Recipe).filter(Recipe.id == id).first()
-        for key, value in request.get_json():
-            setattr(recipe, key, value)
+    @marshall_with(RecipeSchema)
+    def patch(_, session, id=None, data=None):
+        session.merge(data, load=True)
         session.commit()
 
-    # @marshall_with(RecipeResource)
+    @marshall_with(RecipeSchema)
     def delete(_, session, id=None):
         session.query(Recipe).filter(Recipe.id == id).delete()
         session.commit()

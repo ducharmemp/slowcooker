@@ -4,9 +4,16 @@ from source.routes.v1 import v1_api
 from source.models import connection, init_database
 
 app = Flask(__name__)
+
+API_MAPPING = {
+
+}
+
 app.register_blueprint(v1_api, url_prefix="/api/v1")
 
 # app.before_first_request(init_database)
+
+# @app.route('/api/<string:')
 
 
 def has_no_empty_params(rule):

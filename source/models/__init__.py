@@ -8,11 +8,12 @@ from sqlalchemy.orm import sessionmaker, Session
 from source.config import CONFIG
 
 Base = declarative_base()
-ENGINE = create_engine('{dialect}+{driver}://{username}:{password}@{host}:{port}/{database}'.format(**CONFIG['database']['uri']), **CONFIG['database']['config'])
+ENGINE = create_engine(
+    '{dialect}+{driver}://{username}:{password}@{host}:{port}/{database}'.format(
+        **CONFIG['database']['uri']),
+    **CONFIG['database']['config'])
 _session_cls = sessionmaker(bind=ENGINE)
 
-from .recipes import Recipe
-from .users import User
 
 # Base.metadata.create_all(ENGINE)
 
@@ -33,3 +34,7 @@ def connection(*args, **kwargs) -> Session:
         raise
     finally:
         ctx_session.close()
+
+
+from .recipes import Recipe, RecipeStep
+from .users import User
