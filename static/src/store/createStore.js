@@ -1,13 +1,27 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import createSagaMiddleware from 'redux-saga'
+import { all } from 'redux-saga/effects'
 // import createLogger from 'redux-logger';
 // import toDoApp from './modules/toDoApp';
+import user, { watchAuthenticationAsync } from './modules/user';
 
 // const loggerMiddleware = createLogger();
-
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const sagaMiddleware = createSagaMiddleware();
+function* rootSaga() {
+    yield all([
+        watchAuthenticationAsync()
+    ])
+}
 
 const reducer = combineReducers({
+    user
 });
 
-const configureStore = (initialState) => createStoreWithMiddleware(reducer, initialState);
-export default configureStore;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+    reducer,
+    composeEnhancers(applyMiddleware(sagaMiddleware)),
+)
+
+sagaMiddleware.run(rootSaga);
+export default store;

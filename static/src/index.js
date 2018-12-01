@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {Router, Route, Switch} from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 
 import './styles/fonts.css';
+import history from './history';
 
 import {
     HomepageLayout,
@@ -12,12 +13,12 @@ import {
     LoginLayout,
     NotFoundLayout
  } from './containers';
-import configureStore from './store/createStore';
+import store from './store/createStore';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render((
-    <Provider store={configureStore()}>
-        <Router>
+    <Provider store={store}>
+        <Router history={history}>
             <Switch>
                 <Route exact path='/' component={HomepageLayout} />
                 <Route exact path='/recipe' component={RecipeLayout} />

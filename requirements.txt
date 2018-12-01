@@ -5,3 +5,6 @@ marshmallow-sqlalchemy
 gunicorn
 psycopg2
 pytoml
+passlib
+bcrypt
+PyJWT

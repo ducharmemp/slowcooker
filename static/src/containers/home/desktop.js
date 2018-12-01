@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
-import { connect } from 'react-redux';
+import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom';
 import {
   Button,
@@ -9,6 +8,7 @@ import {
   Responsive,
   Segment,
   Visibility,
+  Icon
 } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 
@@ -20,78 +20,79 @@ class DesktopContainer extends Component {
     hideFixedMenu = () => this.setState({ fixed: false })
     showFixedMenu = () => this.setState({ fixed: true })
 
-    renderAuthentication(fixed, authenticationFunc) {
-        return (<Menu.Item position='right'>
-            <Link to='/login'>
-          <Button as='a' inverted={!fixed} onClick={authenticationFunc}>
-              Log in
-          </Button>
-          </Link>
-          <Link to='/login'>
-          <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-              Sign Up
-          </Button>
-          </Link>
-        </Menu.Item>);
+    renderAuthentication(fixed, loginCallback, setupCallback) {
+        return (
+            <Fragment>
+            <Button as='a' inverted={!fixed} onClick={loginCallback}>
+                Log in
+            </Button>
+            <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }} onClick={setupCallback}>
+                Sign Up
+            </Button>
+        </Fragment>);
     }
 
     render() {
-      const {
-          children,
-          authenticateUser,
-          user
-        } = this.props;
-      const { fixed } = this.state;
+    const {
+            children,
+            loginCallback,
+            setupCallback,
+            logoutUserCallback,
+            user
+        } = this.props,
+        { fixed } = this.state,
+        noUser = isEmpty(user);
 
-      return (
+
+    return (
         <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-          <Visibility
-            once={false}
-            onBottomPassed={this.showFixedMenu}
-            onBottomPassedReverse={this.hideFixedMenu}
-          >
-            <Segment
-              inverted
-              textAlign='center'
-              style={{ minHeight: 700, padding: '1em 0em' }}
-              vertical
+            <Visibility
+                once={false}
+                onBottomPassed={this.showFixedMenu}
+                onBottomPassedReverse={this.hideFixedMenu}
             >
-              <Menu
-                fixed={fixed ? 'top' : null}
-                inverted={!fixed}
-                pointing={!fixed}
-                secondary={!fixed}
-                size='large'
-              >
-                <Container>
-                  <Menu.Item as='a' active>
-                    Home
-                  </Menu.Item>
-                  <Menu.Item as='a'>Work</Menu.Item>
-                  <Menu.Item as='a'>Company</Menu.Item>
-                  <Menu.Item as='a'>Careers</Menu.Item>
-                  { isEmpty(user) && this.renderAuthentication(fixed, authenticateUser) }
-                </Container>
-              </Menu>
-              <HomepageHeading />
-            </Segment>
-          </Visibility>
-
-          {children}
-        </Responsive>
-      )
+                <Segment
+                inverted
+                textAlign='center'
+                style={{ minHeight: 700, padding: '1em 0em' }}
+                vertical
+                >
+                <Menu
+                    fixed={fixed ? 'top' : null}
+                    inverted={!fixed}
+                    pointing={!fixed}
+                    secondary={!fixed}
+                    size='large'
+                >
+                    <Container>
+                        <Menu.Item as='a' active>
+                            Home
+                        </Menu.Item>
+                        <Menu.Item as='a'>Work</Menu.Item>
+                        <Menu.Item as='a'>Company</Menu.Item>
+                        <Menu.Item as='a'>Careers</Menu.Item>
+                        <Menu.Item position='right'>
+                            { noUser && this.renderAuthentication(fixed, loginCallback, setupCallback) }
+                            { !noUser &&
+                                <Fragment>
+                                    <Link to='/profile'>
+                                        <Icon name='user'/>
+                                        { user.name }
+                                    </Link>
+                                    <Button inverted={!fixed} onClick={logoutUserCallback}>
+                                        Log Out
+                                    </Button>
+                                </Fragment>
+                            }
+                        </Menu.Item>
+                    </Container>
+                </Menu>
+                <HomepageHeading />
+                </Segment>
+            </Visibility>
+            {children}
+        </Responsive>)
     }
-  }
-
-  function mapStateToProps(state, ownProps) {
-      return {};
-  }
-
-  function mapDispatchToProps(dispatch) {
-}
-
-DesktopContainer.defaultProps = {
-    user: {}
 }
 
 DesktopContainer.propTypes = {
@@ -99,4 +100,4 @@ DesktopContainer.propTypes = {
     user: PropTypes.object
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DesktopContainer);
+export default DesktopContainer;

@@ -1,4 +1,5 @@
-from flask import jsonify
+import jwt
+from flask import jsonify, request, make_response, abort
 from sqlalchemy.orm import Session, lazyload
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -33,7 +34,6 @@ class UserResource(SessionView):
         session.commit()
         return data
 
-
 class UserRecipeResource(SessionView):
     __route_name__ = 'users_recipes'
 
@@ -48,10 +48,3 @@ class UserRecipeResource(SessionView):
         if recipe_id is not None:
             res = [recipe for recipe in res if recipe.id == recipe_id][0]
         return res
-
-    @marshall_with(UserRecipeSchema, allow_none=True)
-    def post(_, session, id=None, data=None, **kwargs):
-        data.creator_id = id
-        session.add(data)
-        session.commit()
-        return data
