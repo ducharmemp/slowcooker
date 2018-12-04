@@ -18,9 +18,9 @@ _session_cls = sessionmaker(bind=ENGINE)
 # Base.metadata.create_all(ENGINE)
 
 
-def init_database():
+def init_database(clean=False):
     Base.metadata.bind = ENGINE
-    Base.metadata.drop_all()
+    clean and Base.metadata.drop_all()
     Base.metadata.create_all()
 
 
@@ -35,6 +35,6 @@ def connection(*args, **kwargs) -> Session:
     finally:
         ctx_session.close()
 
-
+from .ingredients import Ingredient
 from .recipes import Recipe, RecipeStep
 from .users import User

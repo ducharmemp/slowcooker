@@ -6,7 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from source.models import connection
 from source.models import User, Recipe
 from source.utils.session_view import SessionView
-from source.utils.marshalling import CustomSchema, marshall_with
+from source.utils.marshalling import CustomSchema, marshall_with, request_kwargs
 
 from .schemas import UserSchema, UserRecipeSchema
 
@@ -20,7 +20,8 @@ class UserResource(SessionView):
     ]
 
     @marshall_with(UserSchema)
-    def get(_, session, id=None):
+    @request_kwargs('page', 'limit')
+    def get(_, session, id=None, page=0, limit=25):
         users = session.query(User)
         if id is not None:
             users = users.filter(User.id == id).one()

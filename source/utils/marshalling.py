@@ -58,3 +58,13 @@ def marshall_with(schema, allow_none=False):
             return jsonify(marshalled.data)
         return wrapped
     return wrap
+
+
+def request_kwargs(*request_args):
+    def wrap(func):
+        @wraps(func)
+        def wrapped(*args, **kwargs):
+            res_dict = {arg: request.args.get(arg) for arg in request_args if request.args.get(arg)}
+            return func(*args, **kwargs, **res_dict)
+        return wrapped
+    return wrap
