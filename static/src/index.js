@@ -21,7 +21,7 @@ ReactDOM.render((
         <Router history={history}>
             <Switch>
                 <Route exact path='/' component={HomepageLayout} />
-                <Route exact path='/recipe' component={RecipeLayout} />
+                <Route exact path='/recipes' component={RecipeLayout} />
                 <Route exact path='/login' component={LoginLayout} />
                 <Route path='*' component={NotFoundLayout} />
             </Switch>

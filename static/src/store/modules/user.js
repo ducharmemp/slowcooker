@@ -73,14 +73,14 @@ export function* watchAuthenticationAsync() {
 export default function reducer(state = initialState, action) {
   switch (action.type){
   case USER_AUTHENTICATION_LOADING:
-    return {...state, error: action.error};
+    return {...state, error: action.error, loading: action.loading};
   case USER_AUTHENTICATION_SUCCESS:
     window.localStorage.setItem('session', action.token);
-    return {...state, properties: action.payload};
+    return {...state, properties: action.payload, loading: action.loading, error: action.error};
   case USER_AUTHENTICATION_ERROR:
   case USER_LOGOUT:
     window.localStorage.removeItem('session');
-    return {...initialState, error: action.error};
+    return {...initialState, error: action.error, loading: action.loading};
   default:
     return state;
   }

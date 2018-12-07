@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import { Card, Image } from 'semantic-ui-react';
+
 
 class Recipe extends Component {
     static propTypes = {
@@ -9,9 +11,21 @@ class Recipe extends Component {
 
     render () {
         const {
-            recipeTitle
+            recipeTitle,
+            recipeDescription
         } = this.props;
-        return <div>{recipeTitle}</div>
+        return (
+        <Card>
+            <Image src='/404.png' size='big' />
+            <Card.Content>
+                <Card.Header>
+                    {recipeTitle}
+                </Card.Header>
+                <Card.Description>
+                    {recipeDescription}
+                </Card.Description>
+            </Card.Content>
+        </Card>);
     }
 }
 

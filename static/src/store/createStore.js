@@ -4,17 +4,20 @@ import { all } from 'redux-saga/effects'
 // import createLogger from 'redux-logger';
 // import toDoApp from './modules/toDoApp';
 import user, { watchAuthenticationAsync } from './modules/user';
+import recipes, { watchRecipesAsync } from './modules/recipes'
 
 // const loggerMiddleware = createLogger();
 const sagaMiddleware = createSagaMiddleware();
 function* rootSaga() {
     yield all([
-        watchAuthenticationAsync()
+        watchAuthenticationAsync(),
+        watchRecipesAsync(),
     ])
 }
 
 const reducer = combineReducers({
-    user
+    user,
+    recipes
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

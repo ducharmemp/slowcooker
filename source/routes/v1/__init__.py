@@ -62,25 +62,25 @@ def setup_user():
         return jsonify(encode_jwt(user))
 
 
-@v1_api.before_request
-def before_request():
-    print(request.path)
-    if '/login' in request.path or '/setup' in request.path:
-        return
+# @v1_api.before_request
+# def before_request():
+#     print(request.path)
+#     if '/login' in request.path or '/setup' in request.path:
+#         return
 
-    res = (
-        request.headers.get('Authorization') is not None
-        or not request.headers['Authorization']
-    )
+#     res = (
+#         request.headers.get('Authorization') is not None
+#         or not request.headers['Authorization']
+#     )
 
-    if not res:
-        abort(401)
+#     if not res:
+#         abort(401)
 
-    _, token = request.headers['Authorization'].split()
-    try:
-        decode_jwt(token)
-    except jwt.InvalidTokenError as e:
-        abort(401)
+#     _, token = request.headers['Authorization'].split()
+#     try:
+#         decode_jwt(token)
+#     except jwt.InvalidTokenError as e:
+#         abort(401)
 
 
 # @v1_api.errorhandler(Exception)
