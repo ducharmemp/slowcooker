@@ -3,7 +3,7 @@ from enum import IntEnum
 from sqlalchemy import Column, Integer, Text, Table, ForeignKey
 from sqlalchemy.types import Enum
 from sqlalchemy.orm import relationship
-from passlib.hash import bcrypt
+from passlib.hash import argon2
 
 from . import Base, Recipe
 
@@ -35,8 +35,8 @@ class User(Base):
     def __init__(self, name, password, email="", **kwargs):
         self.name = name
         self.email = email
-        self.password = bcrypt.encrypt(password)
+        self.password = argon2.hash(password)
 
     def validate_password(self, password):
-        return bcrypt.verify(password, self.password)
+        return argon2.verify(password, self.password)
 

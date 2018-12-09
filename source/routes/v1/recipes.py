@@ -6,6 +6,7 @@ from source.utils.session_view import SessionView
 from source.utils.marshalling import marshall_with, request_kwargs
 
 from source.utils.sql import windowed_query
+from source.utils.sftp import sftp
 
 from .schemas import RecipeSchema
 

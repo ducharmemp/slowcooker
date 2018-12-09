@@ -11,6 +11,11 @@ association_table = Table('recipe_ingredients', Base.metadata,
     Column('ingredient_id', Integer, ForeignKey('ingredients.id'))
 )
 
+class RecipeImage(Base):
+    __tablename__ = 'recipe_images'
+    id = Column(Integer, primary_key=True)
+    image_path = Column(Text)
+
 class RecipeStep(Base):
     __tablename__ = 'recipe_steps'
 

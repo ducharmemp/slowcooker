@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-
 import { Card, Grid } from 'semantic-ui-react' ;
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-import { Recipe } from '../../components/recipes';
+import { RecipeCard } from '../../components/recipes';
 
 class RecipeContainer extends Component {
     componentDidMount() {
@@ -16,14 +18,13 @@ class RecipeContainer extends Component {
         return (
             <Grid centered columns={2}>
                 <Grid.Column>
-                    <Card.Group>
+                    <Slider autoplay dots fade infinite speed={2000}>
                         {generalRecipes.map(element => {
                             const { name: recipeTitle, ingredients, pictures, steps, id } = element;
-                            return <Recipe recipeTitle={recipeTitle} key={id} />
+                            return <RecipeCard recipeTitle={recipeTitle} key={id} pictures={pictures} />
                         })}
-                    </Card.Group>
+                    </Slider>
                 </Grid.Column>
-                <Grid></Grid>
             </Grid>
         );
     }
