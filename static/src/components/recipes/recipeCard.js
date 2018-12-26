@@ -37,4 +37,4 @@ class RecipeCard extends Component {
     }
 }
 
-export default Recipe;
+export default RecipeCard;

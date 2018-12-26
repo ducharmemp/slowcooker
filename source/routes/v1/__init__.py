@@ -45,12 +45,3 @@ def setup_user():
         session.commit()
         return jsonify(encode_jwt(user, jwt_salt))
 
-# @v1_api.errorhandler(Exception)
-# def handler(e):
-#     print(e)
-#     res = InternalServerError()
-#     if isinstance(e, NoResultFound):
-#         res = NotFound()
-#     elif isinstance(e, MultipleResultsFound):
-#         res = BadRequest()
-#     return res
